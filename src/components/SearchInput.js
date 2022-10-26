@@ -5,10 +5,7 @@ const SearchInput = ({ onChange }) => {
 
   const handleInputChange = (e) => {
     setQuery(e.target.value)
-    if (e.target.value.trim() !== "") {
-      onChange(e.target.value);
-    }
-
+    onChange(e.target.value);
   }
   return (
     <div className="search-books-bar">

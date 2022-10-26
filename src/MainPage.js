@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import * as BooksAPI from "./BooksAPI";
 import BookShelf from "./components/BookShelf";
 import { Link } from "react-router-dom"
 const MainPage = () => {
+  const mounted = useRef(true)
   const [books, setBooks] = useState([]);
   const getAllBooks = async () => {
     const res = await BooksAPI.getAll();
-    setBooks(res);
+    if (mounted.current) {
+      setBooks(res);
+    }
   }
   const bookShelfChanged = (id, value) => {
     let booksClone = books;
@@ -16,10 +19,15 @@ const MainPage = () => {
       }
       return book;
     })
-    setBooks(newBooks);
+    if (mounted) {
+      setBooks(newBooks);
+    }
   }
   useEffect(() => {
     getAllBooks();
+    return () => {
+      mounted.current = false;
+    }
   }, [])
 
   return (
